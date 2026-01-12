@@ -1,0 +1,54 @@
+# Web Backend
+fastapi
+uvicorn
+python-dotenv
+
+# Database
+sqlalchemy
+psycopg2-binary
+
+# Security
+passlib[bcrypt]
+python-jose
+
+# Core Data & ML
+numpy
+pandas
+scikit-learn
+joblib
+
+# Time-Series & Finance
+statsmodels
+yfinance
+
+# NLP & Sentiment
+torch
+transformers
+nltk
+spacy
+sentencepiece
+
+# Explainable AI
+shap
+lime
+
+# Semantic Search / Education
+sentence-transformers
+faiss-cpu
+
+# APIs & Data
+requests
+kaggle
+
+# Generative AI (Optional)
+google-generativeai
+openai
+
+# Visualization (Optional)
+matplotlib
+seaborn
+plotly
+dash
+
+# Testing
+pytest
