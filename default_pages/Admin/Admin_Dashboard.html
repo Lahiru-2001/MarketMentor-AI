@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — MarketMentor AI</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons (Required for bi bi-*) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/CSS/Admin.css">
+</head>
+
+<body>
+
+ <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid px-4">
+
+                <!-- Dashboard Logo + Brand -->
+                <a class="navbar-brand" href="#">
+                    <i class="bi bi-speedometer2"></i> Admin Dashboard
+                </a>
+
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navMenu">
+                    <ul class="navbar-nav ms-auto">
+
+                        <!-- Admin navigation menu items -->
+                        <li class="nav-item"><a class="nav-link active" href="Admin_Dashboard.html">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="User_Management.html">User Management</a></li>
+                        <li class="nav-item"><a class="nav-link" href="AI_Monitoring.html">AI Model Monitoring</a></li>
+                        <li class="nav-item"><a class="nav-link" href="Learning_Hub_Manager.html">Learning Hub Content
+                                Manager</a></li>
+                        <li class="nav-item"><a class="nav-link" href="API_Usage_Monitoring.html">API Usage Monitoring</a></li>
+
+                        <!-- Logout Button -->
+                        <li class="nav-item">
+                            <a class="nav-link logout-btn" href="http://127.0.0.1:8000/">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+    <!-- DASHBOARD CONTENT -->
+    <div class="dashboard container-fluid">
+
+        <h1 class="text-center mb-4" style="color:#38bdf8; font-weight:700;">Quick Overview</h1>
+
+        <div class="dashboard-grid">
+
+            <!-- Total Users -->
+            <div class="dash-card" style="animation-delay:0.1s;">
+                <i class="bi bi-people-fill dash-icon"></i>
+                <div class="dash-title">Total Users</div>
+                <div class="dash-value" id="totalUsers">18,420</div>
+            </div>
+
+            <!-- Active Users -->
+            <div class="dash-card" style="animation-delay:0.2s;">
+                <i class="bi bi-person-check-fill dash-icon"></i>
+                <div class="dash-title">Active Users</div>
+                <div class="dash-value" id="activeUsers">1,248</div>
+            </div>
+
+            <!-- API Usage -->
+            <div class="dash-card" style="animation-delay:0.3s;">
+                <i class="bi bi-code-slash dash-icon"></i>
+                <div class="dash-title">API Usage</div>
+                <div class="dash-value" id="apiUsage">67,554</div>
+            </div>
+
+            <!-- Model Performance -->
+            <div class="dash-card" style="animation-delay:0.4s;">
+                <i class="bi bi-cpu-fill dash-icon"></i>
+                <div class="dash-title">Model Performance</div>
+                <div class="dash-value" id="modelPerformance">98.4%</div>
+            </div>
+
+            <!-- System Health -->
+            <div class="dash-card" style="animation-delay:0.5s;">
+                <i class="bi bi-heart-pulse-fill dash-icon"></i>
+                <div class="dash-title">System Health</div>
+                <div class="dash-value" id="systemHealth">Optimal</div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Charts Section -->
+    <div class="row">
+
+        <!-- Line Chart -->
+        <div class="col-md-6">
+            <div class="chart-box">
+                <h5>User Growth (Line Chart)</h5>
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="col-md-6">
+            <div class="chart-box">
+                <h5>API Calls Per Day (Bar Chart)</h5>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+    <footer>
+            <div class="footer-simple">
+        <p>MarketMentor AI — AI-powered investment guidance for beginners.</p>
+
+        <p>
+            <a href="#">Privacy Policy</a> |
+            <a href="#">Terms of Service</a>
+        </p>
+
+        <!-- Auto-updating year -->
+        <p>© <?php echo date("Y"); ?> MarketMentor AI | All Rights Reserved.</p>
+    </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Example dynamic animation for numbers
+        function animateValue(id, start, end, duration) {
+            let obj = document.getElementById(id);
+            let range = end - start;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            let current = start;
+
+            let timer = setInterval(function () {
+                current += 1;
+                obj.textContent = current.toLocaleString();
+                if (current === end) clearInterval(timer);
+            }, stepTime);
+        }
+
+        // Example of dynamic animations (optional)
+        setTimeout(() => {
+            animateValue("totalUsers", 0, 18420, 1500);
+            animateValue("activeUsers", 0, 1248, 1500);
+            animateValue("apiUsage", 0, 67554, 1500);
+        }, 700);
+
+        // Line Chart — User Growth
+        new Chart(document.getElementById("lineChart"), {
+            type: "line",
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                datasets: [{
+                    label: "Users",
+                    data: [500, 800, 1200, 1600, 2200, 3000],
+                    borderColor: "#38bdf8",
+                    borderWidth: 3,
+                    fill: true,
+                    backgroundColor: "rgba(56,189,248,0.15)"
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Bar Chart — API Usage
+        new Chart(document.getElementById("barChart"), {
+            type: "bar",
+            data: {
+                labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                datasets: [{
+                    label: "API Calls",
+                    data: [8000, 9200, 8700, 11000, 13000, 9000, 7600],
+                    backgroundColor: "#0ea5e9"
+                }]
+            },
+            options: { responsive: true }
+        });
+
+
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

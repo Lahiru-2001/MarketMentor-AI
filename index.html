@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarketMentor-AI</title>
+    <link rel="shortcut icon" href="assets\images\favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/CSS/index.css">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- JWT Decoder -->
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+
+</head>
+
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+
+            <div class="brand" aria-label="MarketMentor-AI brand">
+                <a class="logo" href="index.html">
+                    <img src="assets/images/favicon.ico.png" alt="M-AI Logo">
+                </a>
+
+                <div>
+                    <div style="letter-spacing:0.2px;color:#38bdf8;font-weight:800;">MarketMentor-AI</div>
+                    <!-- <div style="font-size:12px; color:#38bdf8; font-weight:600;">AI Conversations</div> -->
+                </div>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">FEATURES</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">ABOUT US</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header id="home" class="text-center text-white d-flex align-items-center justify-content-center hero-section">
+
+        <!-- 🎬 FINANCIAL ANIMATION BACKGROUND -->
+        <canvas id="tradingCanvas"></canvas>
+
+        <div class="hero-content">
+            <div class="eyebrow">AI-Powered Smart Investment Advisor</div>
+            <h1 class="display-4">Welcome <span id="mainText"></span></h1>
+            <p class="lead"><span id="subText"></span></p>
+
+            <div class="cta-group">
+                <a class="cta-primary" href="#" role="button">Get Started — Login</a>
+                <!-- <a class="cta-secondary" href="#features" role="button">See Features</a> -->
+            </div>
+        </div>
+
+    </header>
+
+
+    <!-- FEATURES SECTION -->
+
+    <section id="features" class="features">
+        <h2 class="section-title">FEATURES</h2>
+        <div class="features-container">
+            <div class="card">
+                <h3>Smart AI-Driven Insights</h3>
+                <p>Our system analyzes historical trends, technical indicators, and financial
+                    sentiment to provide clear and beginner-friendly investment recommendations—supported
+                    with explanations, not just predictions.</p>
+            </div>
+
+            <div class="card">
+                <h3>Forecasting Powered by AI/ML</h3>
+                <p>Using models like LSTM and sentiment analysis, the platform forecasts price
+                    movement, evaluates risks, and provides data-driven insights to help users make informed decisions.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Learn While You Invest</h3>
+                <p>The learning hub includes step-by-step guides, financial basics,
+                    risk management lessons, and interactive materials designed especially for beginners who are new to
+                    investing.</p>
+            </div>
+            <div class="card">
+                <h3>Safe and Transparent System</h3>
+                <p>User data is securely stored using modern security standards.
+                    All AI recommendations include explainability using SHAP/LIME, ensuring transparency and trust.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="container my-5">
+        <h2 class="text-center">About Us</h2>
+        <p class="text-center">
+            The AI-Powered Smart Investment Advisor is developed to support beginner investors who struggle with
+            information overload, lack of guidance, and poor risk understanding. The system combines machine learning
+            forecasting, sentiment analysis, and explainable
+            AI to deliver clear and understandable investment insights.
+        </p>
+        <p class="text-center">
+            This platform aims to make investing accessible, educational, and transparent by offering recommendations
+            along with explanations,
+            a learning hub, and user-friendly tools.
+        </p>
+    </section>
+
+
+    <!-- LOGIN POPUP -->
+    <div id="loginPopup" class="popup-overlay">
+        <div class="popup-box">
+            <h2>Welcome Back</h2>
+            <p class="sub">Login to continue</p>
+
+            <form id="login">
+                <div id="login-alert"></div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="l_email" name="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="l_password" name="password" required placeholder="Enter your password">
+                </div>
+                <div class="or-divider">OR</div>
+
+                <!-- Google Login Button -->
+                <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE" data-context="signin"
+                    data-callback="googleLoginCallback" data-auto_prompt="false">
+                </div>
+
+                <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"
+                    data-text="signin_with" data-logo_alignment="left">
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+
+                <p class="switch">Don't have an account?
+                    <a href="#" id="showRegister">Register</a>
+                </p>
+            </form>
+
+            <span class="close-popup" id="closeLogin">&times;</span>
+        </div>
+    </div>
+
+    <!-- REGISTER POPUP -->
+
+    <div id="registerPopup" class="popup-overlay">
+        <div class="popup-box">
+            <div id="register-alert"></div>
+            <h2>Create Account</h2>
+            <p class="sub">Join MarketMentor-AI today</p>
+
+            <form id="new_register">
+
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <label>User Name</label>
+                            <input type="text" id="r_username" name="username" required placeholder="Enter User Name">
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="r_email" name="email" required placeholder="Enter your email">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <label>Confirm Email Address</label>
+                            <input type="email" id="r_c_email" name="c_email" required placeholder="Confirm your email">
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group password-wrapper">
+                            <label>Password</label>
+                            <input type="password" id="r_password" name="password" required
+                                placeholder="Create a password">
+
+                            <!-- EYE ICON -->
+                            <span class="toggle-password" id="togglePassword">
+                                <i class="bi bi-eye-slash"></i>
+                            </span>
+                        </div>
+
+                        <!-- PASSWORD CHECKLIST -->
+                        <div id="r_password-checklist" style="display:none;">
+                            <p class="pw-msg">Password must contain:</p>
+                            <ul>
+                                <li id="pw-upper" class="invalid">At least one <b>uppercase</b> letter</li>
+                                <li id="pw-lower" class="invalid">At least one <b>lowercase</b> letter</li>
+                                <li id="pw-number" class="invalid">At least one <b>number</b></li>
+                                <li id="pw-special" class="invalid">At least one <b>special</b> character</li>
+                                <li id="pw-length" class="invalid">Minimum <b>8 characters</b></li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <input type="hidden" name="action" value="register">
+
+                <button type="submit" id="B_register" class="btn-primary">Register</button>
+
+                <p class="switch">Already have an account?
+                    <a href="#" id="showLogin">Login</a>
+                </p>
+            </form>
+
+            <span class="close-popup" id="closeRegister">&times;</span>
+        </div>
+    </div>
+
+    <!-- BOOTSTRAP JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/libs/jquery/jquery.min.js"></script>
+    <!-- <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="assets/libs/node-waves/waves.min.js"></script> -->
+
+    <!-- JAVASCRIPT -->
+    <script>
+        jQuery(document).ready(function () {
+
+      
+            let validName = false;
+            let validEmail = false;
+            let validConfirmEmail = false;
+            let validPassword = false;
+
+            // Disable Register button initially
+            // $("#B_register").prop("disabled", true);
+
+        -
+            function validateEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+     
+            function checkPasswordStrength(pwd) {
+                let strong = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}/;
+                return strong.test(pwd);
+            }
+
+          
+            function checkForm() {
+                if (validName && validEmail && validConfirmEmail && validPassword) {
+                    $("#B_register").prop("disabled", false);
+                } else {
+                    // $("#B_register").prop("disabled", true);
+                }
+            }
+
+   
+
+            // Name validation
+            $("#r_username").on("input", function () {
+                validName = $(this).val().trim().length >= 3;
+
+                $(this).css("border-color", validName ? "green" : "red");
+                checkForm();
+            });
+
+            // Email validation
+            $("#r_email").on("input", function () {
+                validEmail = validateEmail($(this).val());
+                $(this).css("border-color", validEmail ? "green" : "red");
+
+                // Auto-check confirm email
+                $("#r_c_email").trigger("input");
+
+                checkForm();
+            });
+
+            // Confirm email match
+            $("#r_c_email").on("input", function () {
+                validConfirmEmail = $(this).val() === $("#r_email").val() && validateEmail($(this).val());
+
+                $(this).css("border-color", validConfirmEmail ? "green" : "red");
+                checkForm();
+            });
+
+            // Password strength
+            $("#r_password").on("input", function () {
+                validPassword = checkPasswordStrength($(this).val());
+
+                $(this).css("border-color", validPassword ? "green" : "red");
+                checkForm();
+            });
+
+
+$("#new_register").submit(function (e) {
+    e.preventDefault();
+
+    $("#register-alert").hide().html("");
+
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8000/auth/register",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+            username: $("#r_username").val(),
+            email: $("#r_email").val(),
+            confirm_email: $("#r_c_email").val(),
+            password: $("#r_password").val()
+        }),
+
+        success: function (res) {
+            $("#register-alert")
+                .html(`<div class="alert alert-success">${res.message}</div>`)
+                .fadeIn();
+        },
+
+  error: function (xhr) {
+    let msg = "Something went wrong";
+
+    if (xhr.responseJSON?.detail) {
+        msg = xhr.responseJSON.detail;
+    }
+
+    $("#register-alert")
+        .html(`<div class="alert alert-danger">${msg}</div>`)
+        .fadeIn();
+}
+
+    });
+});
+
+
+
+            // Password strength checking with visual indicators
+            $("#r_password").on("input", function () {
+                let pwd = $(this).val();
+
+                let upper = /[A-Z]/.test(pwd);
+                let lower = /[a-z]/.test(pwd);
+                let number = /[0-9]/.test(pwd);
+                let special = /[^A-Za-z0-9]/.test(pwd);
+                let length = pwd.length >= 8;
+
+                // Update checklist colors
+                $("#pw-upper").toggleClass("valid", upper).toggleClass("invalid", !upper);
+                $("#pw-lower").toggleClass("valid", lower).toggleClass("invalid", !lower);
+                $("#pw-number").toggleClass("valid", number).toggleClass("invalid", !number);
+                $("#pw-special").toggleClass("valid", special).toggleClass("invalid", !special);
+                $("#pw-length").toggleClass("valid", length).toggleClass("invalid", !length);
+
+                // Full successful password?
+                validPassword = upper && lower && number && special && length;
+
+                $(this).css("border-color", validPassword ? "green" : "red");
+
+                checkForm();
+            });
+
+            // Show checklist on focus
+            $("#r_password").on("focus", function () {
+                $("#r_password-checklist").slideDown(200);
+            });
+
+            // Hide checklist only if empty when losing focus
+            $("#r_password").on("blur", function () {
+                if ($(this).val().trim() === "") {
+                    $("#r_password-checklist").slideUp(200);
+                }
+            });
+            $("#togglePassword").on("click", function () {
+                let input = $("#r_password");
+                let icon = $(this).find("i");
+
+                if (input.attr("type") === "r_password") {
+                    input.attr("type", "text");
+                    icon.removeClass("bi-eye-slash").addClass("bi-eye");
+                } else {
+                    input.attr("type", "r_password");
+                    icon.removeClass("bi-eye").addClass("bi-eye-slash");
+                }
+            });
+
+
+
+    // Login AJAX submission
+$("#login").submit(function (e) {
+    e.preventDefault();
+
+    // Clear previous alerts
+    $("#login-alert").hide().html("");
+
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:8000/auth/login",
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify({
+            email: $("#l_email").val(),
+            password: $("#l_password").val()
+        }),
+
+        success: function (res) {
+            console.log("Login response:", res); // Debug
+
+            // Save JWT + user type
+            localStorage.setItem("access_token", res.access_token);
+            localStorage.setItem("user_type", res.user_type);
+
+            // Show success message
+            $("#login-alert")
+                .html(`<div class="alert alert-success">${res.message}</div>`)
+                .fadeIn();
+
+            // Safety check
+            if (!res.user_type) {
+                console.error("User type not returned from backend");
+                return;
+            }
+
+            // Normalize user type
+            let userType = res.user_type.trim().toLowerCase();
+
+            // Redirect based on role
+            setTimeout(() => {
+                if (userType === "admin") {
+                    window.location.href = "default_pages/Admin/Admin_Dashboard.html";
+                } 
+                else if (userType === "client") {
+                    window.location.href ="default_pages/User/News_Sentiment.html";
+                } 
+                else {
+                    console.error("Unknown user type:", userType);
+                }
+            }, 500);
+        },
+
+        error: function (xhr) {
+            let msg = "Login failed";
+
+            if (xhr.responseJSON && xhr.responseJSON.detail) {
+                msg = xhr.responseJSON.detail;
+            }
+
+            $("#login-alert")
+                .html(`<div class="alert alert-danger">${msg}</div>`)
+                .fadeIn();
+        }
+    });
+});
+            // Canvas Animation
+            const canvas = document.getElementById("tradingCanvas");
+            const ctx = canvas.getContext("2d");
+
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            resizeCanvas();
+            window.addEventListener("resize", resizeCanvas);
+
+            // Create random bars
+            let bars = [];
+            for (let i = 0; i < 50; i++) {
+                bars.push({
+                    x: Math.random() * canvas.width,
+                    height: Math.random() * 120 + 40,
+                    speed: Math.random() * 1 + 0.2,
+                });
+            }
+
+            let linePoints = [];
+            for (let i = 0; i < 200; i++) {
+                linePoints.push({
+                    x: i * 10,
+                    y: canvas.height / 2 + Math.sin(i * 0.2) * 60
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Background numbers
+                ctx.fillStyle = "rgba(70,130,180,0.15)";
+                ctx.font = "22px Poppins";
+                for (let i = 0; i < 10; i++) {
+                    ctx.fillText(
+                        (Math.random() * 5).toFixed(2) + "%",
+                        Math.random() * canvas.width,
+                        Math.random() * canvas.height
+                    );
+                }
+
+                // Bars
+                bars.forEach(bar => {
+                    ctx.fillStyle = "rgba(0,255,255,0.6)";
+                    ctx.fillRect(bar.x, canvas.height - bar.height, 4, bar.height);
+
+                    bar.x += bar.speed;
+                    if (bar.x > canvas.width) bar.x = -10;
+                });
+
+                // Moving Line
+                ctx.beginPath();
+                ctx.strokeStyle = "rgba(255,70,70,0.8)";
+                ctx.lineWidth = 2;
+
+                linePoints.forEach((p, index) => {
+                    if (index === 0) ctx.moveTo(p.x, p.y);
+                    else ctx.lineTo(p.x, p.y);
+
+                    p.x += 1; // speed
+                    if (p.x > canvas.width) p.x = -200;
+                });
+
+                ctx.stroke();
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+
+            // Smooth scroll
+            $(".nav-link").on("click", function (event) {
+                if (this.hash !== "") {
+                    event.preventDefault();
+                    $("html, body").animate({
+                        scrollTop: $(this.hash).offset().top
+                    }, 800);
+                }
+            });
+
+            // Typing effect (Main Text)
+            let mainTxt = "Your personal AI companion for learning, analyzing, and making smarter investment decisions.";
+            let i = 0;
+
+            function typeMain() {
+                if (i < mainTxt.length) {
+                    $("#mainText").append(mainTxt.charAt(i));
+                    i++;
+                    setTimeout(typeMain, 60);
+                }
+            }
+            typeMain();
+
+            // Typing effect (Sub Text)
+            let subTxt = "This platform helps beginners understand market trends, analyze stocks, learn investment strategies, and receive transparent AI-generated insights with explanations.";
+            let j = 0;
+
+            function typeSub() {
+                if (j < subTxt.length) {
+                    $("#subText").append(subTxt.charAt(j));
+                    j++;
+                    setTimeout(typeSub, 40);
+                }
+            }
+            typeSub();
+            // POPUP CONTROLS
+            document.querySelector(".cta-primary").onclick = function (e) {
+                e.preventDefault();
+                document.getElementById("loginPopup").style.display = "flex";
+            };
+
+            document.getElementById("showRegister").onclick = function () {
+                document.getElementById("loginPopup").style.display = "none";
+                document.getElementById("registerPopup").style.display = "flex";
+            };
+
+            document.getElementById("showLogin").onclick = function () {
+                document.getElementById("registerPopup").style.display = "none";
+                document.getElementById("loginPopup").style.display = "flex";
+            };
+
+            document.getElementById("closeLogin").onclick = function () {
+                document.getElementById("loginPopup").style.display = "none";
+            };
+
+            document.getElementById("closeRegister").onclick = function () {
+                document.getElementById("registerPopup").style.display = "none";
+            };
+            window.addEventListener("scroll", function () {
+                const navbar = document.querySelector(".navbar");
+                if (window.scrollY > 50) {
+                    navbar.classList.add("scrolled");
+                } else {
+                    navbar.classList.remove("scrolled");
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

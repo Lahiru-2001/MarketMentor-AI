@@ -52,3 +52,6 @@ dash
 
 # Testing
 pytest
+pydantic
+pydantic-settings
+python-multipart

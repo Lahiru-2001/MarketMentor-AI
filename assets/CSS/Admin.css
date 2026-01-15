@@ -1,0 +1,634 @@
+/*====================================
+Admin_Dashbord.html Ending CSS
+======================================*/
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #020617, #19243f);
+    color: white;
+    transition: 0.3s ease;
+    overflow-x: hidden;
+}
+
+/* --------------------------------------------------
+   NAVBAR
+-------------------------------------------------- */
+.navbar {
+    background: linear-gradient(135deg, #020617, #0f172a) !important;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.navbar-brand {
+    font-size: 20px;
+    font-weight: 700;
+    color: #38bdf8 !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-toggler {
+    border: none !important;
+}
+
+.navbar-toggler:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Links */
+.nav-link {
+    color: #cbd5e1 !important;
+    font-weight: 500;
+    position: relative;
+    transition: 0.2s;
+    padding: 10px 6px !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #38bdf8 !important;
+}
+
+/* LOGOUT BUTTON — ALWAYS RED */
+.nav-link.logout-btn {
+    color: #ff4d4d !important;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+/* Hover Effect */
+.nav-link.logout-btn:hover {
+    color: #ff1a1a !important;
+    text-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+}
+
+/* Remove underline animation only for logout */
+.nav-link.logout-btn::after {
+    display: none !important;
+}
+
+/* Mobile Optimization — bigger tap target */
+@media (max-width: 768px) {
+    .nav-link.logout-btn {
+        padding: 12px 0 !important;
+        font-size: 17px;
+    }
+}
+
+
+/* Mobile: Remove hover underline for better UX */
+@media (min-width: 992px) {
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0%;
+        height: 2px;
+        background: #38bdf8;
+        transition: 0.3s ease;
+        border-radius: 10px;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+        width: 100%;
+    }
+}
+
+/* --------------------------------------------------
+   DASHBOARD WRAPPER
+-------------------------------------------------- */
+.dashboard {
+    padding: 90px 25px 30px;
+}
+
+
+/* --------------------------------------------------
+   DASHBOARD GRID — MOBILE-FIRST
+-------------------------------------------------- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+}
+
+@media (min-width: 600px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 26px;
+    }
+}
+
+@media (min-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* --------------------------------------------------
+   CARDS
+-------------------------------------------------- */
+.dash-card {
+    padding: 28px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+    transition: 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.9s forwards;
+    text-align: center;
+    /* Better for mobile */
+}
+
+/* Less intense hover on mobile */
+@media (hover: hover) {
+    .dash-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(56, 189, 248, 0.45);
+        box-shadow: 0 0 24px rgba(56, 189, 248, 0.3);
+    }
+}
+
+.dash-icon {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.dash-title {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.dash-value {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+/* --------------------------------------------------
+   CHART SECTION — MOBILE OPTIMIZED
+-------------------------------------------------- */
+.chart-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    padding: 22px;
+    border-radius: 16px;
+    margin-top: 28px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.2);
+}
+
+.chart-box h5 {
+    font-size: 17px;
+    margin-bottom: 18px;
+}
+
+/* Make charts scale smoothly on mobile */
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* --------------------------------------------------
+   FOOTER
+-------------------------------------------------- */
+footer {
+    padding: 20px;
+    text-align: center;
+    color: #94a3b8;
+    margin-top: 50px;
+    border-top: 1px solid rgba(56, 189, 248, 0.15);
+    font-size: 14px;
+}
+
+
+/* --------------------------------------------------
+   ANIMATIONS
+-------------------------------------------------- */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/*====================================
+          Admin_Dashbord.html Ending CSS
+======================================*/
+
+/*====================================
+          User_Management.html Start CSS
+======================================*/
+.UserManagement {
+    padding: 100px 25px 40px;
+}
+
+/* Title */
+.UserManagement h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* --------------------------------------------------
+   GRID
+-------------------------------------------------- */
+.UserManagement-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+@media (min-width: 600px) {
+    .UserManagement-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* --------------------------------------------------
+   USER CARDS
+-------------------------------------------------- */
+.user-card {
+    padding: 28px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.8s forwards;
+    transition: 0.3s;
+}
+
+@media (hover: hover) {
+    .user-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(56, 189, 248, 0.5);
+        box-shadow: 0 0 24px rgba(56, 189, 248, 0.25);
+    }
+}
+
+.user-card .dash-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    color: #38bdf8;
+}
+
+.user-card .dash-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.user-card .dash-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 6px;
+}
+
+/* ============================================
+       USER TABLE STYLING
+    ================================================= */
+
+.user-table-container {
+    animation: fadeUp 0.8s forwards;
+    opacity: 0;
+}
+
+.table-title {
+    color: #38bdf8;
+    font-weight: 700;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Table Glass Style */
+.user-table {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(56, 189, 248, 0.15);
+
+}
+
+.user-table thead {
+    background: rgba(56, 189, 248, 0.13);
+}
+
+.user-table thead th {
+    color: #38bdf8;
+    font-weight: 600;
+    padding: 14px;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.user-table tbody tr {
+    transition: 0.25s ease;
+}
+
+.user-table tbody tr:hover {
+    background: rgba(56, 189, 248, 0.08);
+}
+
+/* Buttons */
+.status-btn,
+.action-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.status-btn.active {
+    background: rgba(34, 197, 94, 0.25);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.status-btn.inactive {
+    background: rgba(246, 156, 30, 0.25);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* Action Buttons */
+.action-btn.delete {
+    background: rgba(239, 68, 68, 0.25);
+    color: #ef4444;
+}
+
+.action-btn:hover,
+.status-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+}
+
+/* Search & Filters */
+.filter-row {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 15px;
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    margin-bottom: 18px;
+    backdrop-filter: blur(6px);
+}
+
+.filter-row input,
+.filter-row select {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-radius: 10px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.filter-row input::placeholder {
+    color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+
+    .status-btn,
+    .action-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .table-title {
+        font-size: 18px;
+    }
+}
+
+/*====================================
+User_Management.html Ending CSS
+======================================*/
+
+/*====================================
+AI_Monitoring.html Starting CSS
+======================================*/
+.chart-box canvas {
+    max-height: 250px;
+    height: 180px !important;
+}
+
+
+/* Page title */
+.dashboard h1 i {
+    color: #38bdf8;
+}
+
+/* Logs Box Smooth Scrollbar */
+#logsBox::-webkit-scrollbar {
+    width: 8px;
+}
+#logsBox::-webkit-scrollbar-thumb {
+    background: rgba(56,189,248,0.4);
+    border-radius: 10px;
+}
+#logsBox::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Retrain animation glow */
+.dash-card:active {
+    transform: scale(0.98);
+}
+
+/* Better on mobile */
+@media (max-width: 768px) {
+    .chart-box {
+        margin-top: 25px;
+    }
+}
+
+/*====================================
+   AI_Monitoring.html Ending CSS
+======================================*/
+
+/*====================================
+Learning_Hub_Manager.html Starting CSS
+======================================*/
+
+/*====================================
+Learning_Hub_Manager.html Ending CSS
+======================================*/
+
+/*====================================
+    API_Usage_Monitoring START
+======================================*/
+
+.APIUsage {
+    padding: 100px 20px 40px;
+}
+
+.APIUsage h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* CARDS GRID */
+.API-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-bottom: 35px;
+}
+
+@media (min-width: 600px) {
+    .API-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .API-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* API CARDS */
+.api-card {
+    padding: 28px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(56,189,248,0.15);
+    text-align: center;
+    backdrop-filter: blur(12px);
+    animation: fadeUp 0.8s forwards;
+    opacity: 0;
+}
+
+.api-card:hover {
+    transform: translateY(-6px);
+    transition: 0.3s;
+    border-color: rgba(56,189,248,0.4);
+}
+
+.api-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #cbd5e1;
+}
+
+.api-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.api-icon {
+    font-size: 38px;
+    color: #38bdf8;
+    margin-bottom: 12px;
+}
+
+/* CHART SECTION */
+.chart-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+}
+
+@media (min-width: 992px) {
+    .chart-section {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.chart-box {
+    background: rgba(255,255,255,0.05);
+    padding: 22px;
+    border-radius: 16px;
+    border: 1px solid rgba(56,189,248,0.15);
+    backdrop-filter: blur(12px);
+}
+
+.chart-box h4 {
+    color: #38bdf8;
+    font-size: 18px;
+    margin-bottom: 14px;
+}
+
+/* API TABLE */
+.api-table-container {
+    animation: fadeUp 1s forwards;
+    opacity: 0;
+}
+
+.api-table {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(56,189,248,0.15);
+}
+
+.api-table th {
+    background: rgba(56,189,248,0.15);
+    color: #38bdf8;
+    padding: 14px;
+}
+
+.api-table td {
+    padding: 14px;
+    color: #e2e8f0;
+}
+
+/* Status Labels */
+.status {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.status.success {
+    background: rgba(34,197,94,0.25);
+    color: #22c55e;
+}
+
+.status.fail {
+    background: rgba(239,68,68,0.3);
+    color: #ef4444;
+}
+
+/*====================================
+    API_Usage_Monitoring END
+======================================*/
