@@ -1,14 +1,20 @@
 import requests
-import os
-from utils.env_loader import load_dotenv
-
-API_KEY = os.getenv("ALPHA_VANTAGE_KEY")
+from utils.api_key_manager import get_next_key
 
 def get_company_overview(symbol):
-    url = "https://www.alphavantage.co/query"
-    params = {
-        "function": "OVERVIEW",
-        "symbol": symbol,
-        "apikey": API_KEY
-    }
-    return requests.get(url, params=params).json()
+    for _ in range(5): 
+        api_key = get_next_key("ALPHA_VANTAGE_KEYS")
+        response = requests.get(
+            "https://www.alphavantage.co/query",
+            params={
+                "function": "OVERVIEW",
+                "symbol": symbol,
+                "apikey": api_key
+            }
+        )
+
+        data = response.json()
+        if "Note" not in data:
+            return data
+
+    raise Exception("Alpha Vantage rate limit exceeded for all keys")

@@ -1,13 +1,15 @@
 import requests
-import os
-from utils.env_loader import load_dotenv
-
-API_KEY = os.getenv("MARKETSTACK_KEY")
+from utils.api_key_manager import get_next_key
 
 def get_market_data(symbol):
-    url = "http://api.marketstack.com/v1/eod"
-    params = {
-        "access_key": API_KEY,
-        "symbols": symbol
-    }
-    return requests.get(url, params=params).json()
+    for _ in range(4):
+        api_key = get_next_key("MARKETSTACK_KEYS")
+        response = requests.get(
+            "http://api.marketstack.com/v1/eod",
+            params={"access_key": api_key, "symbols": symbol}
+        )
+
+        if response.status_code == 200:
+            return response.json()
+
+    raise Exception("Marketstack API limit exceeded")

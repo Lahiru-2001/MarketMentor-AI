@@ -1,14 +1,20 @@
 import requests
-import os
-from utils.env_loader import load_dotenv
-
-API_KEY = os.getenv("NEWS_API_KEY")
+from utils.api_key_manager import get_next_key
 
 def get_financial_news(query="investment"):
-    url = "https://newsapi.org/v2/everything"
-    params = {
-        "q": query,
-        "language": "en",
-        "apiKey": API_KEY
-    }
-    return requests.get(url, params=params).json()
+    for _ in range(4):
+        api_key = get_next_key("NEWS_API_KEYS")
+        response = requests.get(
+            "https://newsapi.org/v2/everything",
+            params={
+                "q": query,
+                "language": "en",
+                "apiKey": api_key
+            }
+        )
+
+        data = response.json()
+        if data.get("status") == "ok":
+            return data
+
+    raise Exception("NewsAPI rate limit exceeded")

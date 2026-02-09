@@ -1,15 +1,16 @@
 import requests
-import os
-from utils.env_loader import load_dotenv
-
-API_KEY = os.getenv("COINMARKETCAP_KEY")
+from utils.api_key_manager import get_next_key
 
 def get_crypto_price(symbol="BTC"):
-    url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
-    headers = {
-        "X-CMC_PRO_API_KEY": API_KEY
-    }
-    params = {
-        "symbol": symbol
-    }
-    return requests.get(url, headers=headers, params=params).json()
+    for _ in range(5):
+        api_key = get_next_key("COINMARKETCAP_KEYS")
+        response = requests.get(
+            "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest",
+            headers={"X-CMC_PRO_API_KEY": api_key},
+            params={"symbol": symbol}
+        )
+
+        if response.status_code == 200:
+            return response.json()
+
+    raise Exception("CoinMarketCap API limit exceeded")
