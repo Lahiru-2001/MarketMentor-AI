@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Support — MarketMentor AI</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../../assets/CSS/Admin.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#">Admin Dashboard</a>
+            <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="Admin_Dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="User_Management.html">User Management</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Customer_Support.html">Customer Support</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link logout-btn" href="http://127.0.0.1:8000/">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE CONTENT -->
+    <div class="support-wrapper container-fluid mt-5">
+        <div class="table-responsive">
+            <table class="table support-table align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="supportTableBody"></tbody>
+            </table>
+
+            <!-- Empty message -->
+            <div id="noSupportMessage" class="text-center text-muted mt-3" style="display:none; background: #ff9090; padding: 10px; border-radius: 5px; color: #fff19f;">
+                <p>No user support yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- REPLY MODAL -->
+    <div class="modal fade" id="replyModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content support-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reply to Customer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control reply-textarea" placeholder="Type your reply here..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn send-btn">Send Reply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW REPLIES MODAL -->
+    <div class="modal fade" id="viewRepliesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reply History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="replyHistoryBody">Loading replies...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-simple">
+            <p>MarketMentor AI — AI-powered investment guidance for beginners.</p>
+            <p>© 2026 MarketMentor AI | All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const token = localStorage.getItem("access_token");
+            let selectedSupportId = null;
+
+            if (!token) {
+                alert("Unauthorized");
+                window.location.href = "/";
+                return;
+            }
+
+            const tableBody = document.getElementById("supportTableBody");
+            const noSupportMessage = document.getElementById("noSupportMessage");
+
+            // ==============================
+            // LOAD SUPPORT LIST
+            // ==============================
+            fetch("http://127.0.0.1:8000/admin/support", {
+                headers: { "Authorization": "Bearer " + token }
+            })
+            .then(res => res.json())
+            .then(data => {
+                tableBody.innerHTML = "";
+
+                if (!data || data.length === 0) {
+                    noSupportMessage.style.display = "block";
+                    return;
+                } else {
+                    noSupportMessage.style.display = "none";
+                }
+
+                data.forEach(item => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>#${item.support_id}</td>
+                            <td>${item.username}</td>
+                            <td>${item.email}</td>
+                            <td>${item.issue_type}</td>
+                            <td>${item.description}</td>
+                            <td>${item.created_at}</td>
+                            <td>
+                                <button 
+                                    class="btn btn-sm view-replies-btn 
+                                    ${item.status === 'Pending' ? 'btn-warning' : 'btn-success'}"
+                                    data-id="${item.support_id}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#viewRepliesModal">
+                                    ${item.status}
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-sm reply-btn"
+                                    data-id="${item.support_id}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#replyModal">
+                                    Reply
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(err => {
+                console.error("Error loading support list:", err);
+                noSupportMessage.style.display = "block";
+                tableBody.innerHTML = "";
+            });
+
+            // ==============================
+            // CLICK EVENTS (VIEW + REPLY)
+            // ==============================
+            document.addEventListener("click", function(e){
+
+                // VIEW REPLIES
+                if(e.target.classList.contains("view-replies-btn")){
+                    const supportId = e.target.getAttribute("data-id");
+
+                    fetch(`http://127.0.0.1:8000/admin/support/replies/${supportId}`, {
+                        headers: { "Authorization": "Bearer " + token }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        const replyContainer = document.getElementById("replyHistoryBody");
+                        if(!data || data.length === 0){
+                            replyContainer.innerHTML = "<p>No replies yet.</p>";
+                            return;
+                        }
+
+                        let html = "";
+                        data.forEach(reply => {
+                            html += `
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6>Admin: ${reply.admin_name}</h6>
+                                        <p>${reply.reply_message}</p>
+                                        <small class="text-muted">${reply.created_at}</small>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        replyContainer.innerHTML = html;
+                    })
+                    .catch(err => console.error("Error loading replies:", err));
+                }
+
+                // STORE SUPPORT ID FOR REPLY
+                if (e.target.classList.contains("reply-btn")) {
+                    selectedSupportId = e.target.getAttribute("data-id");
+                    document.querySelector(".reply-textarea").value = "";
+                }
+            });
+
+            // ==============================
+            // SEND REPLY
+            // ==============================
+            document.querySelector(".send-btn").addEventListener("click", function(){
+                const replyMessage = document.querySelector(".reply-textarea").value.trim();
+
+                if(!replyMessage){
+                    alert("Reply cannot be empty");
+                    return;
+                }
+
+                if(!selectedSupportId){
+                    alert("Support ID not selected");
+                    return;
+                }
+
+                fetch(`http://127.0.0.1:8000/admin/support/reply/${selectedSupportId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify({ reply_message: replyMessage })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message || "Reply sent successfully");
+                    const replyModal = bootstrap.Modal.getInstance(document.getElementById('replyModal'));
+                    replyModal.hide();
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error("Error sending reply:", err);
+                    alert("Failed to send reply");
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

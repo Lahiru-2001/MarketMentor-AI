@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MarketMentor-AI</title>
-    <link rel="shortcut icon" href="assets\images\favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/CSS/index.css">
+    <link rel="shortcut icon" href="assets\images\favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/CSS/index.css" />
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <!-- JWT Decoder -->
@@ -17,25 +17,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 </head>
 
-
 <body>
-
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-
             <div class="brand" aria-label="MarketMentor-AI brand">
                 <a class="logo" href="index.html">
-                    <img src="assets/images/favicon.ico.png" alt="M-AI Logo">
+                    <img src="assets/images/favicon.png" alt="M-AI Logo" />
                 </a>
 
                 <div>
-                    <div style="letter-spacing:0.2px;color:#38bdf8;font-weight:800;">MarketMentor-AI</div>
+                    <div style="letter-spacing: 0.2px; color: #38bdf8; font-weight: 800">
+                        MarketMentor-AI
+                    </div>
                     <!-- <div style="font-size:12px; color:#38bdf8; font-weight:600;">AI Conversations</div> -->
                 </div>
             </div>
@@ -47,8 +44,12 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#home">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#features">FEATURES</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#about">ABOUT US</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">FEATURES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">ABOUT US</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -56,8 +57,7 @@
 
     <!-- HERO SECTION -->
     <header id="home" class="text-center text-white d-flex align-items-center justify-content-center hero-section">
-
-        <!-- 🎬 FINANCIAL ANIMATION BACKGROUND -->
+        <!-- FINANCIAL ANIMATION BACKGROUND -->
         <canvas id="tradingCanvas"></canvas>
 
         <div class="hero-content">
@@ -70,9 +70,7 @@
                 <!-- <a class="cta-secondary" href="#features" role="button">See Features</a> -->
             </div>
         </div>
-
     </header>
-
 
     <!-- FEATURES SECTION -->
 
@@ -81,30 +79,39 @@
         <div class="features-container">
             <div class="card">
                 <h3>Smart AI-Driven Insights</h3>
-                <p>Our system analyzes historical trends, technical indicators, and financial
-                    sentiment to provide clear and beginner-friendly investment recommendations—supported
-                    with explanations, not just predictions.</p>
+                <p>
+                    Our system analyzes historical trends, technical indicators, and
+                    financial sentiment to provide clear and beginner-friendly
+                    investment recommendations—supported with explanations, not just
+                    predictions.
+                </p>
             </div>
 
             <div class="card">
                 <h3>Forecasting Powered by AI/ML</h3>
-                <p>Using models like LSTM and sentiment analysis, the platform forecasts price
-                    movement, evaluates risks, and provides data-driven insights to help users make informed decisions.
+                <p>
+                    Using models like LSTM and sentiment analysis, the platform
+                    forecasts price movement, evaluates risks, and provides data-driven
+                    insights to help users make informed decisions.
                 </p>
             </div>
 
             <div class="card">
                 <h3>Learn While You Invest</h3>
-                <p>The learning hub includes step-by-step guides, financial basics,
-                    risk management lessons, and interactive materials designed especially for beginners who are new to
-                    investing.</p>
+                <p>
+                    The learning hub includes step-by-step guides, financial basics,
+                    risk management lessons, and interactive materials designed
+                    especially for beginners who are new to investing.
+                </p>
             </div>
             <div class="card">
                 <h3>Safe and Transparent System</h3>
-                <p>User data is securely stored using modern security standards.
-                    All AI recommendations include explainability using SHAP/LIME, ensuring transparency and trust.</p>
+                <p>
+                    User data is securely stored using modern security standards. All AI
+                    recommendations include explainability using SHAP/LIME, ensuring
+                    transparency and trust.
+                </p>
             </div>
-
         </div>
     </section>
 
@@ -112,18 +119,18 @@
     <section id="about" class="container my-5">
         <h2 class="text-center">About Us</h2>
         <p class="text-center">
-            The AI-Powered Smart Investment Advisor is developed to support beginner investors who struggle with
-            information overload, lack of guidance, and poor risk understanding. The system combines machine learning
-            forecasting, sentiment analysis, and explainable
-            AI to deliver clear and understandable investment insights.
+            The AI-Powered Smart Investment Advisor is developed to support beginner
+            investors who struggle with information overload, lack of guidance, and
+            poor risk understanding. The system combines machine learning
+            forecasting, sentiment analysis, and explainable AI to deliver clear and
+            understandable investment insights.
         </p>
         <p class="text-center">
-            This platform aims to make investing accessible, educational, and transparent by offering recommendations
-            along with explanations,
-            a learning hub, and user-friendly tools.
+            This platform aims to make investing accessible, educational, and
+            transparent by offering recommendations along with explanations, a
+            learning hub, and user-friendly tools.
         </p>
     </section>
-
 
     <!-- LOGIN POPUP -->
     <div id="loginPopup" class="popup-overlay">
@@ -135,26 +142,25 @@
                 <div id="login-alert"></div>
                 <div class="input-group">
                     <label>Email Address</label>
-                    <input type="email" id="l_email" name="email" required placeholder="Enter your email">
+                    <input type="email" id="l_email" name="email" required placeholder="Enter your email" />
                 </div>
 
                 <div class="input-group">
                     <label>Password</label>
-                    <input type="password" id="l_password" name="password" required placeholder="Enter your password">
+                    <input type="password" id="l_password" name="password" required placeholder="Enter your password" />
                 </div>
-                <div class="or-divider">OR</div>
+                <!-- <div class="or-divider">OR</div> -->
 
                 <!-- Google Login Button -->
-                <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE" data-context="signin"
-                    data-callback="googleLoginCallback" data-auto_prompt="false">
-                </div>
+               <!-- <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE" data-context="signin"
+                    data-callback="googleLoginCallback" data-auto_prompt="false"></div> -->
 
                 <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline"
-                    data-text="signin_with" data-logo_alignment="left">
-                </div>
+                    data-text="signin_with" data-logo_alignment="left"></div>
                 <button type="submit" class="btn-primary">Login</button>
 
-                <p class="switch">Don't have an account?
+                <p class="switch">
+                    Don't have an account?
                     <a href="#" id="showRegister">Register</a>
                 </p>
             </form>
@@ -172,19 +178,18 @@
             <p class="sub">Join MarketMentor-AI today</p>
 
             <form id="new_register">
-
                 <div class="row">
                     <div class="col">
                         <div class="input-group">
                             <label>User Name</label>
-                            <input type="text" id="r_username" name="username" required placeholder="Enter User Name">
+                            <input type="text" id="r_username" name="username" required placeholder="Enter User Name" />
                         </div>
                     </div>
 
                     <div class="col">
                         <div class="input-group">
                             <label>Email Address</label>
-                            <input type="email" id="r_email" name="email" required placeholder="Enter your email">
+                            <input type="email" id="r_email" name="email" required placeholder="Enter your email" />
                         </div>
                     </div>
                 </div>
@@ -193,7 +198,8 @@
                     <div class="col">
                         <div class="input-group">
                             <label>Confirm Email Address</label>
-                            <input type="email" id="r_c_email" name="c_email" required placeholder="Confirm your email">
+                            <input type="email" id="r_c_email" name="c_email" required
+                                placeholder="Confirm your email" />
                         </div>
                     </div>
 
@@ -201,7 +207,7 @@
                         <div class="input-group password-wrapper">
                             <label>Password</label>
                             <input type="password" id="r_password" name="password" required
-                                placeholder="Create a password">
+                                placeholder="Create a password" />
 
                             <!-- EYE ICON -->
                             <span class="toggle-password" id="togglePassword">
@@ -210,26 +216,37 @@
                         </div>
 
                         <!-- PASSWORD CHECKLIST -->
-                        <div id="r_password-checklist" style="display:none;">
+                        <div id="r_password-checklist" style="display: none">
                             <p class="pw-msg">Password must contain:</p>
                             <ul>
-                                <li id="pw-upper" class="invalid">At least one <b>uppercase</b> letter</li>
-                                <li id="pw-lower" class="invalid">At least one <b>lowercase</b> letter</li>
-                                <li id="pw-number" class="invalid">At least one <b>number</b></li>
-                                <li id="pw-special" class="invalid">At least one <b>special</b> character</li>
-                                <li id="pw-length" class="invalid">Minimum <b>8 characters</b></li>
+                                <li id="pw-upper" class="invalid">
+                                    At least one <b>uppercase</b> letter
+                                </li>
+                                <li id="pw-lower" class="invalid">
+                                    At least one <b>lowercase</b> letter
+                                </li>
+                                <li id="pw-number" class="invalid">
+                                    At least one <b>number</b>
+                                </li>
+                                <li id="pw-special" class="invalid">
+                                    At least one <b>special</b> character
+                                </li>
+                                <li id="pw-length" class="invalid">
+                                    Minimum <b>8 characters</b>
+                                </li>
                             </ul>
                         </div>
-
-
                     </div>
                 </div>
 
-                <input type="hidden" name="action" value="register">
+                <input type="hidden" name="action" value="register" />
 
-                <button type="submit" id="B_register" class="btn-primary">Register</button>
+                <button type="submit" id="B_register" class="btn-primary">
+                    Register
+                </button>
 
-                <p class="switch">Already have an account?
+                <p class="switch">
+                    Already have an account?
                     <a href="#" id="showLogin">Login</a>
                 </p>
             </form>
@@ -248,114 +265,174 @@
 
     <!-- JAVASCRIPT -->
     <script>
-        jQuery(document).ready(function () {
+jQuery(document).ready(function () {
 
-      
-            let validName = false;
-            let validEmail = false;
-            let validConfirmEmail = false;
-            let validPassword = false;
+let validName = false;
+let validEmail = false;
+let validConfirmEmail = false;
+let validPassword = false;
 
-            // Disable Register button initially
-            // $("#B_register").prop("disabled", true);
+// EMAIL VALIDATION
+function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
-        -
-            function validateEmail(email) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            }
+// PASSWORD STRENGTH CHECK
+function checkPasswordStrength(pwd) {
+    let strong = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}/;
+    return strong.test(pwd);
+}
 
-     
-            function checkPasswordStrength(pwd) {
-                let strong = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}/;
-                return strong.test(pwd);
-            }
+function checkForm() {
+    if (validName && validEmail && validConfirmEmail && validPassword) {
+        $("#B_register").prop("disabled", false);
+    }
+}
 
-          
-            function checkForm() {
-                if (validName && validEmail && validConfirmEmail && validPassword) {
-                    $("#B_register").prop("disabled", false);
-                } else {
-                    // $("#B_register").prop("disabled", true);
-                }
-            }
+// NAME VALIDATION
+$("#r_username").on("input", function () {
 
-   
+    validName = $(this).val().trim().length >= 3;
+    $(this).css("border-color", validName ? "green" : "red");
 
-            // Name validation
-            $("#r_username").on("input", function () {
-                validName = $(this).val().trim().length >= 3;
+    checkForm();
+});
 
-                $(this).css("border-color", validName ? "green" : "red");
-                checkForm();
-            });
+// EMAIL VALIDATION
+$("#r_email").on("input", function () {
 
-            // Email validation
-            $("#r_email").on("input", function () {
-                validEmail = validateEmail($(this).val());
-                $(this).css("border-color", validEmail ? "green" : "red");
+    validEmail = validateEmail($(this).val());
+    $(this).css("border-color", validEmail ? "green" : "red");
 
-                // Auto-check confirm email
-                $("#r_c_email").trigger("input");
+    $("#r_c_email").trigger("input");
 
-                checkForm();
-            });
+    checkForm();
+});
 
-            // Confirm email match
-            $("#r_c_email").on("input", function () {
-                validConfirmEmail = $(this).val() === $("#r_email").val() && validateEmail($(this).val());
+// CONFIRM EMAIL
+$("#r_c_email").on("input", function () {
 
-                $(this).css("border-color", validConfirmEmail ? "green" : "red");
-                checkForm();
-            });
+    validConfirmEmail =
+        $(this).val() === $("#r_email").val() &&
+        validateEmail($(this).val());
 
-            // Password strength
-            $("#r_password").on("input", function () {
-                validPassword = checkPasswordStrength($(this).val());
+    $(this).css("border-color", validConfirmEmail ? "green" : "red");
 
-                $(this).css("border-color", validPassword ? "green" : "red");
-                checkForm();
-            });
+    checkForm();
+});
+
+// PASSWORD VALIDATION + CHECKLIST
+$("#r_password").on("input", function () {
+
+    let pwd = $(this).val();
+
+    let upper = /[A-Z]/.test(pwd);
+    let lower = /[a-z]/.test(pwd);
+    let number = /[0-9]/.test(pwd);
+    let special = /[^A-Za-z0-9]/.test(pwd);
+    let length = pwd.length >= 8;
+
+    $("#pw-upper").toggleClass("valid", upper).toggleClass("invalid", !upper);
+    $("#pw-lower").toggleClass("valid", lower).toggleClass("invalid", !lower);
+    $("#pw-number").toggleClass("valid", number).toggleClass("invalid", !number);
+    $("#pw-special").toggleClass("valid", special).toggleClass("invalid", !special);
+    $("#pw-length").toggleClass("valid", length).toggleClass("invalid", !length);
+
+    validPassword = upper && lower && number && special && length;
+
+    $(this).css("border-color", validPassword ? "green" : "red");
+
+    checkForm();
+});
+
+// SHOW PASSWORD CHECKLIST
+$("#r_password").on("focus", function () {
+    $("#r_password-checklist").slideDown(200);
+});
+
+// HIDE CHECKLIST
+$("#r_password").on("blur", function () {
+    if ($(this).val().trim() === "") {
+        $("#r_password-checklist").slideUp(200);
+    }
+});
+
+// TOGGLE PASSWORD VISIBILITY
+$("#togglePassword").on("click", function () {
+
+    let input = $("#r_password");
+    let icon = $(this).find("i");
+
+    if (input.attr("type") === "password") {
+
+        input.attr("type", "text");
+        icon.removeClass("bi-eye-slash").addClass("bi-eye");
+
+    } else {
+
+        input.attr("type", "password");
+        icon.removeClass("bi-eye").addClass("bi-eye-slash");
+
+    }
+});
 
 
+// REGISTER SUBMIT
 $("#new_register").submit(function (e) {
+
     e.preventDefault();
 
     $("#register-alert").hide().html("");
 
+    // PASSWORD WEAK CHECK
+    if (!validPassword) {
+
+        $("#register-alert")
+        .html(`<div class="alert alert-danger">Enter password is weak!</div>`)
+        .fadeIn();
+
+        return;
+    }
+
     $.ajax({
+
         type: "POST",
         url: "http://127.0.0.1:8000/auth/register",
         contentType: "application/json",
         dataType: "json",
+
         data: JSON.stringify({
             username: $("#r_username").val(),
             email: $("#r_email").val(),
             confirm_email: $("#r_c_email").val(),
-            password: $("#r_password").val()
+            password: $("#r_password").val(),
         }),
 
         success: function (res) {
+
             $("#register-alert")
-                .html(`<div class="alert alert-success">${res.message}</div>`)
-                .fadeIn();
+            .html(`<div class="alert alert-success">${res.message}</div>`)
+            .fadeIn();
+
         },
 
-  error: function (xhr) {
-    let msg = "Something went wrong";
+        error: function (xhr) {
 
-    if (xhr.responseJSON?.detail) {
-        msg = xhr.responseJSON.detail;
-    }
+            let msg = "Something went wrong";
 
-    $("#register-alert")
-        .html(`<div class="alert alert-danger">${msg}</div>`)
-        .fadeIn();
-}
+            if (xhr.responseJSON?.detail) {
+                msg = xhr.responseJSON.detail;
+            }
+
+            $("#register-alert")
+            .html(`<div class="alert alert-danger">${msg}</div>`)
+            .fadeIn();
+        },
 
     });
-});
 
 
+            });
 
             // Password strength checking with visual indicators
             $("#r_password").on("input", function () {
@@ -368,11 +445,21 @@ $("#new_register").submit(function (e) {
                 let length = pwd.length >= 8;
 
                 // Update checklist colors
-                $("#pw-upper").toggleClass("valid", upper).toggleClass("invalid", !upper);
-                $("#pw-lower").toggleClass("valid", lower).toggleClass("invalid", !lower);
-                $("#pw-number").toggleClass("valid", number).toggleClass("invalid", !number);
-                $("#pw-special").toggleClass("valid", special).toggleClass("invalid", !special);
-                $("#pw-length").toggleClass("valid", length).toggleClass("invalid", !length);
+                $("#pw-upper")
+                    .toggleClass("valid", upper)
+                    .toggleClass("invalid", !upper);
+                $("#pw-lower")
+                    .toggleClass("valid", lower)
+                    .toggleClass("invalid", !lower);
+                $("#pw-number")
+                    .toggleClass("valid", number)
+                    .toggleClass("invalid", !number);
+                $("#pw-special")
+                    .toggleClass("valid", special)
+                    .toggleClass("invalid", !special);
+                $("#pw-length")
+                    .toggleClass("valid", length)
+                    .toggleClass("invalid", !length);
 
                 // Full successful password?
                 validPassword = upper && lower && number && special && length;
@@ -406,14 +493,45 @@ $("#new_register").submit(function (e) {
                 }
             });
 
-
-
     // Login AJAX submission
 $("#login").submit(function (e) {
+
     e.preventDefault();
 
     // Clear previous alerts
     $("#login-alert").hide().html("");
+
+    let email = $("#l_email").val().trim();
+    let password = $("#l_password").val().trim();
+
+    // Basic validation
+    if (email === "" || password === "") {
+
+        $("#login-alert")
+            .html(`<div class="alert alert-danger">Invalid username or password!</div>`)
+            .fadeIn();
+
+        return;
+    }
+
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailPattern.test(email)) {
+    $("#login-alert")
+        .html(`<div class="alert alert-danger">Invalid email!</div>`)
+        .fadeIn();
+    return;
+}
+
+    // Password length validation (minimum 8 characters)
+    if (password.length < 8) {
+
+        $("#login-alert")
+            .html(`<div class="alert alert-danger">Invalid password!</div>`)
+            .fadeIn();
+
+        return;
+    }
 
     $.ajax({
         type: "POST",
@@ -421,47 +539,49 @@ $("#login").submit(function (e) {
         contentType: "application/json",
         dataType: "json",
         data: JSON.stringify({
-            email: $("#l_email").val(),
-            password: $("#l_password").val()
+            email: email,
+            password: password,
         }),
 
         success: function (res) {
-            console.log("Login response:", res); // Debug
 
-            // Save JWT + user type
+            console.log("Login response:", res);
+
+            // Save token + role
             localStorage.setItem("access_token", res.access_token);
             localStorage.setItem("user_type", res.user_type);
 
-            // Show success message
             $("#login-alert")
                 .html(`<div class="alert alert-success">${res.message}</div>`)
                 .fadeIn();
 
-            // Safety check
             if (!res.user_type) {
                 console.error("User type not returned from backend");
                 return;
             }
 
-            // Normalize user type
             let userType = res.user_type.trim().toLowerCase();
 
-            // Redirect based on role
             setTimeout(() => {
+
                 if (userType === "admin") {
-                    window.location.href = "default_pages/Admin/Admin_Dashboard.html";
-                } 
-                else if (userType === "client") {
-                    window.location.href ="default_pages/User/News_Sentiment.html";
-                } 
-                else {
+                    window.location.href =
+                        "default_pages/Admin/Admin_Dashboard.html";
+
+                } else if (userType === "client") {
+                    window.location.href =
+                        "default_pages/User/Recommendation.html";
+
+                } else {
                     console.error("Unknown user type:", userType);
                 }
+
             }, 500);
         },
 
         error: function (xhr) {
-            let msg = "Login failed";
+
+            let msg = "Invalid username or password!";
 
             if (xhr.responseJSON && xhr.responseJSON.detail) {
                 msg = xhr.responseJSON.detail;
@@ -498,7 +618,7 @@ $("#login").submit(function (e) {
             for (let i = 0; i < 200; i++) {
                 linePoints.push({
                     x: i * 10,
-                    y: canvas.height / 2 + Math.sin(i * 0.2) * 60
+                    y: canvas.height / 2 + Math.sin(i * 0.2) * 60,
                 });
             }
 
@@ -512,12 +632,12 @@ $("#login").submit(function (e) {
                     ctx.fillText(
                         (Math.random() * 5).toFixed(2) + "%",
                         Math.random() * canvas.width,
-                        Math.random() * canvas.height
+                        Math.random() * canvas.height,
                     );
                 }
 
                 // Bars
-                bars.forEach(bar => {
+                bars.forEach((bar) => {
                     ctx.fillStyle = "rgba(0,255,255,0.6)";
                     ctx.fillRect(bar.x, canvas.height - bar.height, 4, bar.height);
 
@@ -545,19 +665,22 @@ $("#login").submit(function (e) {
 
             animate();
 
-
             // Smooth scroll
             $(".nav-link").on("click", function (event) {
                 if (this.hash !== "") {
                     event.preventDefault();
-                    $("html, body").animate({
-                        scrollTop: $(this.hash).offset().top
-                    }, 800);
+                    $("html, body").animate(
+                        {
+                            scrollTop: $(this.hash).offset().top,
+                        },
+                        800,
+                    );
                 }
             });
 
             // Typing effect (Main Text)
-            let mainTxt = "Your personal AI companion for learning, analyzing, and making smarter investment decisions.";
+            let mainTxt =
+                "Your personal AI companion for learning, analyzing, and making smarter investment decisions.";
             let i = 0;
 
             function typeMain() {
@@ -570,7 +693,8 @@ $("#login").submit(function (e) {
             typeMain();
 
             // Typing effect (Sub Text)
-            let subTxt = "This platform helps beginners understand market trends, analyze stocks, learn investment strategies, and receive transparent AI-generated insights with explanations.";
+            let subTxt =
+                "This platform helps beginners understand market trends, analyze stocks, learn investment strategies, and receive transparent AI-generated insights with explanations.";
             let j = 0;
 
             function typeSub() {
@@ -614,7 +738,6 @@ $("#login").submit(function (e) {
             });
         });
     </script>
-
 </body>
 
 </html>

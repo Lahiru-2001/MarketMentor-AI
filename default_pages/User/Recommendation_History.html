@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MarketMentor-AI — Home</title>
+
+  <!-- Bootstrap (optional for grid & utilities) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="stylesheet" href="../../assets/CSS/User_Dashbord.css">
+</head>
+
+<body>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+      <div class="brand" aria-label="MarketMentor-AI brand">
+        <a class="logo" href="#">
+          <img src="../../assets/images/favicon.png" />
+        </a>
+        <div>
+          <div style="letter-spacing: 0.2px; color: #38bdf8; font-weight: 800">
+            MarketMentor-AI
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <a class="nav-item" href="Recommendation.html">
+          <div class="icon"><i class="fa-solid fa-hand-holding-dollar" style="color: rgb(255, 212, 59);"></i></div>
+          <div class="label">Investment Recommendation</div>
+        </a>
+        <a class="nav-item active" href="Recommendation_History.html">
+          <div class="icon"><i class="fa-solid fa-clock-rotate-left" style="color: rgb(255, 212, 59);"></i></div>
+          <div class="label">Recommendation History</div>
+        </a>
+      </nav>
+      <!-- Profile & dropdown -->
+      <div class="sidebar-footer">
+        <div class="profile" id="profileBtn">
+          <img class="avatar" src="../../assets/images/default_avatar.png.png" alt="User avatar" />
+          <div class="meta">
+            <div class="name">Lahiru Kasun</div>
+
+          </div>
+          <div style="margin-left: auto; color: var(--text-muted)">▾</div>
+        </div>
+        <div id="profileDropdown" class="profile-dropdown">
+          <a href="Profile.html">Profile & Preferences</a>
+          <a href="Support.html">Support</a>
+          <a href="http://127.0.0.1:8000/">Logout</a>
+        </div>
+      </div>
+    </aside>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" id="mainContent">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <!-- <h3 style="margin:0;color:#eaf6ff">Recommendation History</h3> -->
+        </div>
+      </div>
+      <!-- Recommendation History Section -->
+      <section class="history-section">
+        <div class="history-header">
+          <h4>Your Recommendation History</h4>
+          <hr style="border: 3px solid #b0e7fe; width: 39%;">
+        </div>
+
+        <div class="history-grid" id="historyContainer">
+          <!-- Dynamic history will load here -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- JS: Interactions -->
+  <script>
+    (function () {
+      const sidebar = document.getElementById('sidebar');
+      const toggle = document.getElementById('sidebarToggle');
+      const profileBtn = document.getElementById('profileBtn');
+      const profileDropdown = document.getElementById('profileDropdown');
+      const askBtn = document.getElementById('askBtn');
+      const assistantInput = document.getElementById('assistantInput');
+
+      // ===============================
+      // LOAD USER HISTORY
+      // ===============================
+
+      async function loadHistory() {
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+          alert("Please login again.");
+          window.location.href = "../../index.html";
+          return;
+        }
+
+        try {
+          const response = await fetch("http://127.0.0.1:8000/recommendation/history", {
+            method: "GET",
+            headers: {
+              "Authorization": "Bearer " + token
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch history");
+          }
+
+          const data = await response.json();
+          const historyContainer = document.getElementById("historyContainer");
+
+          historyContainer.innerHTML = "";
+
+          if (data.history.length === 0) {
+            historyContainer.innerHTML = "<p style='color:white'>No saved recommendations yet.</p>";
+            return;
+          }
+
+          data.history.forEach(item => {
+            const card = document.createElement("div");
+            card.classList.add("history-card");
+
+            card.innerHTML = `
+        <div class="history-title"><strong>Question:</strong> ${item.question}</div>
+        <div class="history-explanation">${item.explanation}</div>
+        <div class="history-meta">
+        <strong>Date:</strong> ${new Date(item.created_at).toLocaleString()}
+        </div>
+      `;
+
+            historyContainer.appendChild(card);
+          });
+
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      // Load history when page loads
+      document.addEventListener("DOMContentLoaded", loadHistory);
+
+      // Sidebar toggle
+      toggle?.addEventListener("click", () =>
+        sidebar.classList.toggle("closed"),
+      );
+
+      // Close sidebar on small screens when clicking outside
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth < 920) {
+          if (!sidebar.contains(e.target) && !e.target.closest('.toggle-btn')) {
+            if (!sidebar.classList.contains('closed')) {
+              sidebar.classList.add('closed');
+            }
+          }
+        }
+      });
+
+      // Profile dropdown
+      profileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle("show");
+        profileBtn.setAttribute(
+          "aria-expanded",
+          profileDropdown.classList.contains("show"),
+        );
+      });
+      document.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target)) {
+          profileDropdown.classList.remove("show");
+          profileBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Keyboard friendly
+      profileBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          profileBtn.click();
+        }
+      });
+
+      // Assistant Ask button
+      askBtn.addEventListener('click', () => {
+        const query = assistantInput.value.trim();
+        if (!query) {
+          assistantInput.focus();
+          return;
+        }
+        // For demo: show a quick alert — replace with real API call
+        alert('Assistant query: ' + query);
+        assistantInput.value = '';
+      });
+
+      // Press Enter to ask
+      assistantInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          askBtn.click();
+        }
+      });
+
+      // Simple nav active highlight
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', (ev) => {
+          document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+        });
+      });
+
+      // Accessibility: focus trap for dropdown optional (not implemented here)
+    })();
+  </script>
+
+  <!-- bootstrap (optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

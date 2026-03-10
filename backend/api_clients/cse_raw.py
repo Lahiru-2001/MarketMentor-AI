@@ -2,68 +2,27 @@ import requests
 
 BASE_URL = "https://www.cse.lk/api"
 
-# -----------------------------
-# Market Summary
-# -----------------------------
-def get_market_summary() -> dict:
-    url = f"{BASE_URL}/marketSummery"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
+HEADERS = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "User-Agent": "MarketMentor-AI/1.0"
+}
 
 
-# -----------------------------
-# Company Info by Symbol
-# -----------------------------
-def get_company_info(symbol: str) -> dict:
-    url = f"{BASE_URL}/companyInfoSummery?symbol={symbol}"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
-
-
-# -----------------------------
-# Today's Share Prices
-# -----------------------------
 def get_today_share_prices() -> list:
+    """
+    Fetch today's share prices from CSE
+    """
     url = f"{BASE_URL}/todaySharePrice"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
 
-
-# -----------------------------
-# Top Gainers & Losers
-# -----------------------------
-def get_top_gainers() -> list:
-    url = f"{BASE_URL}/topGainers"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
-
-
-def get_top_losers() -> list:
-    url = f"{BASE_URL}/topLooses"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
-
-
-# -----------------------------
-# Trade Summary
-# -----------------------------
-def get_trade_summary() -> list:
-    url = f"{BASE_URL}/tradeSummary"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
-
-
-# -----------------------------
-# Market Status (Open/Close)
-# -----------------------------
-def get_market_status() -> dict:
-    url = f"{BASE_URL}/marketStatus"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
+    try:
+        # Use POST as CSE sometimes blocks GET
+        response = requests.post(url, headers=HEADERS, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error: {e}. Trying fallback...")
+        return []  # Return empty list if API fails
+    except requests.exceptions.RequestException as e:
+        print(f" Request Exception: {e}. Returning empty list.")
+        return []
