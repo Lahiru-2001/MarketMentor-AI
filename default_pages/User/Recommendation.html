@@ -278,159 +278,142 @@
   </main>
   </div>
 
+  <!-- JAVASCRIPT -->
   <script>
+    (function () {
+      // DOM elements
+      const sidebar = document.getElementById("sidebar");
+      const toggle = document.getElementById("sidebarToggle");
+      const profileBtn = document.getElementById("profileBtn");
+      const profileDropdown = document.getElementById("profileDropdown");
+      const askBtn = document.getElementById("askBtn");
+      const assistantInput = document.getElementById("assistantInput");
+      const resultDiv = document.getElementById("result");
+      const saveBtn = document.getElementById("saveBtn");
+      const errorMsg = document.getElementById("errorMsg");
 
-(function () {
+      let lastRecommendation = null; // Store last AI recommendation for saving
 
-  const sidebar = document.getElementById("sidebar");
-  const toggle = document.getElementById("sidebarToggle");
-  const profileBtn = document.getElementById("profileBtn");
-  const profileDropdown = document.getElementById("profileDropdown");
-  const askBtn = document.getElementById("askBtn");
-  const assistantInput = document.getElementById("assistantInput");
-  const resultDiv = document.getElementById("result");
-  const saveBtn = document.getElementById("saveBtn");
-  const errorMsg = document.getElementById("errorMsg"); // ✅ added
+      // Sidebar toggle
+      toggle?.addEventListener("click", () => sidebar.classList.toggle("closed"));
 
-  let lastRecommendation = null;
+      // Profile dropdown toggle
+      profileBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle("show");
+        profileBtn.setAttribute("aria-expanded", profileDropdown.classList.contains("show"));
+      });
 
-  // Sidebar toggle
-  toggle?.addEventListener("click", () =>
-    sidebar.classList.toggle("closed"),
-  );
-
-  // Profile dropdown
-  profileBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    profileDropdown.classList.toggle("show");
-    profileBtn.setAttribute(
-      "aria-expanded",
-      profileDropdown.classList.contains("show"),
-    );
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!profileBtn.contains(e.target)) {
-      profileDropdown.classList.remove("show");
-      profileBtn.setAttribute("aria-expanded", "false");
-    }
-  });
-
-  function showAIResponse(text) {
-    resultDiv.style.display = "block";
-    resultDiv.innerText = text;
-  }
-
-  askBtn.addEventListener("click", async () => {
-
-    const query = assistantInput.value.trim();
-
-    /* EMPTY FIELD VALIDATION */
-    if (query === "") {
-      errorMsg.style.display = "block";
-      assistantInput.classList.add("input-error"); // ✅ red border
-      assistantInput.focus();
-      return;
-    }
-
-    errorMsg.style.display = "none";
-    assistantInput.classList.remove("input-error");
-
-    try {
-
-      askBtn.disabled = true;
-      askBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-
-      const response = await fetch(
-        "http://127.0.0.1:8000/recommendation/ask",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-          body: JSON.stringify({ question: query }),
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.detail || "Error occurred");
-        return;
-      }
-
-      lastRecommendation = data;
-      showAIResponse(data.explanation);
-      saveBtn.style.display = "block";
-
-    } catch (error) {
-
-      alert("Server connection failed.");
-      console.error(error);
-
-    } finally {
-
-      askBtn.disabled = false;
-      askBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
-      assistantInput.value = "";
-
-    }
-  });
-
-  /* CLEAR ERROR WHEN USER TYPES */
-  assistantInput.addEventListener("input", () => {
-    errorMsg.style.display = "none";
-    assistantInput.classList.remove("input-error");
-  });
-
-  saveBtn.addEventListener("click", async () => {
-
-    if (!lastRecommendation) return;
-
-    try {
-
-      const response = await fetch(
-        "http://127.0.0.1:8000/recommendation/save",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-          body: JSON.stringify(lastRecommendation),
+      // Close profile dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target)) {
+          profileDropdown.classList.remove("show");
+          profileBtn.setAttribute("aria-expanded", "false");
         }
-      );
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.detail || "Save failed");
-        return;
+      // Display AI response
+      function showAIResponse(text) {
+        resultDiv.style.display = "block";
+        resultDiv.innerText = text;
       }
 
-      alert("Recommendation saved successfully!");
+      // ASK BUTTON: send question to backend
+      askBtn.addEventListener("click", async () => {
+        const query = assistantInput.value.trim();
 
-      saveBtn.style.display = "none";
-      lastRecommendation = null;
+        // VALIDATION: Empty input
+        if (query === "") {
+          errorMsg.style.display = "block";
+          assistantInput.classList.add("input-error");
+          assistantInput.focus();
+          return;
+        }
 
-    } catch (error) {
+        errorMsg.style.display = "none";
+        assistantInput.classList.remove("input-error");
 
-      alert("Save failed. Server error.");
-      console.error(error);
+        try {
+          askBtn.disabled = true;
+          askBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
-    }
-  });
+          // POST request to backend
+          const response = await fetch("http://127.0.0.1:8000/recommendation/ask", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+            body: JSON.stringify({ question: query }),
+          });
 
-  assistantInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      askBtn.click();
-    }
-  });
+          const data = await response.json();
 
-})();
+          if (!response.ok) {
+            alert(data.detail || "Error occurred");
+            return;
+          }
 
+          lastRecommendation = data;
+          showAIResponse(data.explanation);
+          saveBtn.style.display = "block";
+
+        } catch (error) {
+          alert("Server connection failed.");
+          console.error(error);
+        } finally {
+          askBtn.disabled = false;
+          askBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+          assistantInput.value = "";
+        }
+      });
+
+      // Clear error message when typing
+      assistantInput.addEventListener("input", () => {
+        errorMsg.style.display = "none";
+        assistantInput.classList.remove("input-error");
+      });
+
+      // SAVE BUTTON: Save last recommendation
+      saveBtn.addEventListener("click", async () => {
+        if (!lastRecommendation) return;
+
+        try {
+          const response = await fetch("http://127.0.0.1:8000/recommendation/save", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+            body: JSON.stringify(lastRecommendation),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            alert(data.detail || "Save failed");
+            return;
+          }
+
+          alert("Recommendation saved successfully!");
+          saveBtn.style.display = "none";
+          lastRecommendation = null;
+
+        } catch (error) {
+          alert("Save failed. Server error.");
+          console.error(error);
+        }
+      });
+
+      // Allow Enter key to submit question
+      assistantInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          askBtn.click();
+        }
+      });
+
+    })();
   </script>
 
   <!-- Bootstrap JS -->

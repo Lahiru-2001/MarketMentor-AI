@@ -1,20 +1,21 @@
 import requests
-from utils.api_key_manager import get_next_key
+from backend.utils.api_key_manager import get_next_key
 
-def get_financial_news(query="investment"):
-    for _ in range(4):
-        api_key = get_next_key("NEWS_API_KEYS")
-        response = requests.get(
-            "https://newsapi.org/v2/everything",
-            params={
-                "q": query,
-                "language": "en",
-                "apiKey": api_key
-            }
-        )
 
-        data = response.json()
-        if data.get("status") == "ok":
-            return data
+def get_market_news(symbol: str):
 
-    raise Exception("NewsAPI rate limit exceeded")
+    api_key = get_next_key("NEWS_API_KEYS")
+
+    url = (
+        f"https://newsapi.org/v2/everything?"
+        f"q={symbol}&"
+        f"sortBy=publishedAt&"
+        f"language=en&"
+        f"apiKey={api_key}"
+    )
+
+    response = requests.get(url)
+
+    data = response.json()
+
+    return data.get("articles", [])

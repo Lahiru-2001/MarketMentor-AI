@@ -1,5 +1,5 @@
 import requests
-from utils.api_key_manager import get_next_key
+from backend.utils.api_key_manager import get_next_key
 
 def get_eod_data(symbol):
     for _ in range(5):

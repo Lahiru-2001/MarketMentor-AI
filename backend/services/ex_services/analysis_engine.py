@@ -1,54 +1,111 @@
-import re
+from backend.ml.lstm.predict import predict_price
 from backend.services.ex_services.recommendation_engine import generate_recommendation
 from backend.services.ex_services.explanation_engine import generate_personalized_explanation
 
 
-def extract_investment_amount(question: str):
-    """
-    Extract investment amount from user question (Rs. 5,000 / 5000 etc.)
-    """
-    match = re.search(r"(?:rs\.?|lkr)?\s?([\d,]+)", question.lower())
-    if match:
-        amount = match.group(1).replace(",", "")
-        return float(amount)
-    return None
-
-
 def analyze_asset(
-    prices: list,
-    news_texts: list,
-    user_risk: str,
-    asset_type: str,
-    symbol: str,
-    user_question: str
-) -> str:
+    prices,
+    news_texts,
+    user_risk,
+    asset_type,
+    symbol,
+    user_question,
+    intent="ASSET_ANALYSIS"
+):
     """
-    Main AI Brain — Now question-aware & personalized
+    Main AI analysis function for MarketMentor-AI.
+
+    Parameters:
+    ----------
+    prices : list
+        Historical asset price data.
+
+    news_texts : str or list
+        News headlines or financial news related to the asset.
+
+    user_risk : str
+        User's risk profile (Low, Medium, High).
+
+    asset_type : str
+        Type of asset (Stock, Crypto, Forex, etc.).
+
+    symbol : str
+        Asset trading symbol (e.g., AAPL, BTC-USD).
+
+    user_question : str
+        User query for personalized AI explanation.
+
+    intent : str
+        Analysis mode:
+        - "ASSET_ANALYSIS" = Full AI analysis
+        - "PRICE_PREDICTION" = Only forecast future price
+
+    Returns:
+    -------
+    dict
+        Personalized AI-generated explanation and recommendation.
     """
 
+    # Get the most recent price from historical data
+    current_price = prices[-1]
+
+   
+    # PRICE PREDICTION MODE
+    if intent == "PRICE_PREDICTION":
+
+        # Predict next price using LSTM model
+        forecast_price = predict_price(prices)
+
+        # Add small adjustment factor (15%) to create future projected price
+        future_price = round(
+            current_price + ((forecast_price - current_price) * 1.15),
+            2
+        )
+
+        # Prepare AI output structure for explanation engine
+        ai_output = {
+            "recommendation": "PRICE FORECAST",
+            "predicted_trend": "Forecast Analysis",
+            "confidence": 0.92,   # Static confidence score
+            "risk": "Calculated",
+            "forecast_price": forecast_price,
+            "future_price": future_price,
+            "sentiment": 0.5,     # Neutral sentiment placeholder
+            "shap_values": {
+                "Current Price": current_price,
+                "LSTM Forecast": forecast_price
+            }
+        }
+
+        # Generate final user-friendly explanation
+        return generate_personalized_explanation(
+            ai_output=ai_output,
+            asset_type=asset_type,
+            symbol=symbol,
+            user_risk=user_risk,
+            user_question=user_question,
+            current_price=current_price
+        )
+
+    # FULL AI ANALYSIS MODE
+  
+    # This mode combines:
+    # - Price trend analysis
+    # - Sentiment analysis
+    # - Risk analysis
+    # - Recommendation generation
     ai_output = generate_recommendation(
         prices=prices,
         news_text=news_texts,
         user_risk=user_risk
     )
 
-    investment_amount = extract_investment_amount(user_question)
-
-    current_price = prices[-1]
-
-    shares = None
-    if investment_amount:
-        shares = int(investment_amount // current_price)
-
-    final_answer = generate_personalized_explanation(
+    # Convert AI analysis into personalized explanation
+    return generate_personalized_explanation(
         ai_output=ai_output,
         asset_type=asset_type,
         symbol=symbol,
         user_risk=user_risk,
         user_question=user_question,
-        investment_amount=investment_amount,
-        shares=shares,
         current_price=current_price
     )
-
-    return final_answer

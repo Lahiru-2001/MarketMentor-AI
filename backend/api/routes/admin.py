@@ -1,29 +1,27 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import text
+from backend.core.dependencies import get_db          
+from backend.core.security import get_current_user    
+from backend.db.models import User                    
 
-from backend.core.dependencies import get_db
-from backend.core.security import get_current_user
-from backend.db.models import User
-
+# Create router for Admin-related endpoints
 router = APIRouter(tags=["Admin"])
 
-
-# -----------------------------
-# GET ALL USERS (JOIN PROFILE)
-# -----------------------------
+# GET ALL CLIENT USERS WITH PROFILE DETAILS
 @router.get("/users")
 def get_all_users(
-    db: Session = Depends(get_db),
-    current_user: int = Depends(get_current_user)
+    db: Session = Depends(get_db),                # Inject database session
+    current_user: int = Depends(get_current_user) # Get current logged-in user ID
 ):
-    # Check if admin
+    # Fetch current logged-in user from database
     admin = db.query(User).filter(User.user_id == current_user).first()
 
+    # Allow only Admin users to access this endpoint
     if not admin or admin.user_type != "Admin":
         raise HTTPException(status_code=403, detail="Not authorized")
 
-    # Fetch users with user_type 'Client' or 'client' only
+    # Join users table with user_profile table
     query = text("""
         SELECT 
             u.user_id,
@@ -38,50 +36,56 @@ def get_all_users(
         FROM users u
         LEFT JOIN user_profile up
             ON u.user_id = up.user_id
-        WHERE LOWER(u.user_type) = 'client'  -- Case-insensitive check for 'Client' or 'client'
+        WHERE LOWER(u.user_type) = 'client'
         ORDER BY u.user_id DESC
     """)
 
+    # Execute query and return result as dictionary mappings
     result = db.execute(query).mappings().all()
+
     return result
 
-# -----------------------------
-# DEACTIVATE USER
-# -----------------------------
+# DEACTIVATE USER ACCOUNT
 @router.put("/deactivate/{user_id}")
 def deactivate_user(
-    user_id: int,
+    user_id: int,                                 # User ID to deactivate
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_user)
 ):
+    # Check current user is admin
     admin = db.query(User).filter(User.user_id == current_user).first()
 
     if not admin or admin.user_type != "Admin":
         raise HTTPException(status_code=403, detail="Not authorized")
 
+    # Find target user by ID
     user = db.query(User).filter(User.user_id == user_id).first()
 
+    # If user does not exist
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
+    # Change status to Inactive
     user.status = "Inactive"
+
+    # Save changes to database
     db.commit()
 
     return {"message": "User deactivated successfully"}
 
-# -----------------------------
 # GET ALL SUPPORT MESSAGES
-# -----------------------------
 @router.get("/support")
 def get_all_support(
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_user)
 ):
+    # Verify admin access
     admin = db.query(User).filter(User.user_id == current_user).first()
 
     if not admin or admin.user_type != "Admin":
         raise HTTPException(status_code=403, detail="Not authorized")
 
+    # Fetch all support messages ordered by latest first
     query = text("""
         SELECT 
             s.support_id,
@@ -95,26 +99,28 @@ def get_all_support(
         ORDER BY s.support_id DESC
     """)
 
+    # Execute query and return support messages
     result = db.execute(query).mappings().all()
+
     return result
 
 
-# -----------------------------
+
 # REPLY TO SUPPORT MESSAGE
-# -----------------------------
 @router.post("/support/reply/{support_id}")
 def reply_support_message(
-    support_id: int,
-    reply_data: dict,
+    support_id: int,                              # Support ticket ID
+    reply_data: dict,                             # Reply content sent from frontend
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_user)
 ):
+    # Verify current user is admin
     admin = db.query(User).filter(User.user_id == current_user).first()
 
     if not admin or admin.user_type != "Admin":
         raise HTTPException(status_code=403, detail="Not authorized")
 
-    # Check support exists
+    # Check if support message exists
     support = db.execute(
         text("SELECT * FROM support WHERE support_id = :id"),
         {"id": support_id}
@@ -123,7 +129,7 @@ def reply_support_message(
     if not support:
         raise HTTPException(status_code=404, detail="Support message not found")
 
-    # Insert reply
+    # Insert admin reply into reply_support table
     db.execute(
         text("""
             INSERT INTO reply_support (support_id, admin_id, reply_message)
@@ -136,7 +142,7 @@ def reply_support_message(
         }
     )
 
-    # Update support status
+    # Update support ticket status after reply
     db.execute(
         text("""
             UPDATE support
@@ -146,24 +152,27 @@ def reply_support_message(
         {"support_id": support_id}
     )
 
+    # Save both insert + update
     db.commit()
 
     return {"message": "Reply sent successfully"}
 
-# ---------------------------------------
-# GET REPLIES BY SUPPORT ID
-# ---------------------------------------
+
+
+# GET ALL REPLIES FOR A SPECIFIC SUPPORT MESSAGE
 @router.get("/support/replies/{support_id}")
 def get_support_replies(
-    support_id: int,
+    support_id: int,                              # Support ticket ID
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_user)
 ):
+    # Verify admin access
     admin = db.query(User).filter(User.user_id == current_user).first()
 
     if not admin or admin.user_type != "Admin":
         raise HTTPException(status_code=403, detail="Not authorized")
 
+    # Fetch replies + admin username who replied
     replies = db.execute(
         text("""
             SELECT 

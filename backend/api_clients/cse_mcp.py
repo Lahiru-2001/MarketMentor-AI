@@ -26,5 +26,5 @@ def get_mcp_stock_price(symbol: str) -> dict:
         }
 
     except Exception as e:
-        print("⚠ MCP fetch error:", e)
+        print("MCP fetch error:", e)
         return None

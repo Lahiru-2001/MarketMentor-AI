@@ -36,5 +36,5 @@ def get_all_cse_prices():
         return all_prices
 
     except Exception as e:
-        print("⚠ Error fetching all CSE prices:", e)
+        print("Error fetching all CSE prices:", e)
         return []

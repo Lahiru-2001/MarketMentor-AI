@@ -12,80 +12,169 @@ def generate_personalized_explanation(
     current_price=None
 ):
     """
-    Generates question-aware professional investment answer.
+    Generate a full professional investment analysis report.
+
+    Parameters:
+    ----------
+    ai_output : dict
+        AI prediction results including recommendation, forecast, sentiment, etc.
+
+    asset_type : str
+        Type of asset (stock, crypto, forex, etc.)
+
+    symbol : str
+        Investment symbol (example: AAPL, TSLA)
+
+    user_risk : str
+        User risk preference (low / medium / high)
+
+    user_question : str
+        User's original investment question
+
+    investment_amount : float, optional
+        Amount user plans to invest
+
+    shares : int, optional
+        Number of shares user wants to buy
+
+    current_price : float, optional
+        Current market price
+
+    Returns:
+    -------
+    str
+        Full formatted AI investment report
     """
 
-    if not GROQ_AVAILABLE:
-        return _fallback_answer(symbol, investment_amount, shares, current_price)
-
+    # Extract prediction values from AI output dictionary
     recommendation = ai_output.get("recommendation")
     trend = ai_output.get("predicted_trend")
     confidence = ai_output.get("confidence")
     sentiment = ai_output.get("sentiment")
     risk = ai_output.get("risk")
     forecast = ai_output.get("forecast_price")
+    future_price = ai_output.get("future_price")
+    shap_values = ai_output.get("shap_values", {})
 
-    prompt = f"""
-You are a professional Sri Lankan investment advisor.
+    # Convert sentiment score into percentage
+    sentiment_percent = round(sentiment * 100, 1)
 
-A user asked:
-"{user_question}"
-
-Current Market Data:
-Symbol: {symbol}
-Current Price: Rs. {current_price}
-Forecast Price: {forecast}
-Market Trend: {trend}
-Sentiment Score: {sentiment}
-Risk Level: {risk}
-AI Recommendation: {recommendation}
-Confidence: {confidence}
-
-If investment amount is provided:
-Investment Amount: {investment_amount}
-Estimated Shares: {shares}
-
-Generate a professional structured answer:
-
-1. Directly answer the user's question first.
-2. If amount provided, calculate and mention share count.
-3. Provide 2026 investment insights.
-4. Mention valuation, growth, dividends (if relevant).
-5. Provide beginner considerations.
-6. Keep it professional and structured.
-7. Max 400 words.
-8. No repetition.
-"""
-
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {"role": "system", "content": "You are a disciplined financial advisor."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.3,
-        max_tokens=600
+    # Convert confidence score into readable label
+    confidence_label = (
+        "High" if confidence > 0.7 else
+        "Moderate" if confidence > 0.4 else
+        "Low"
     )
 
-    return response.choices[0].message.content.strip()
+    # ================= AI EXPLANATION SECTION =================
+    explanation = ""
+
+    # Use Groq AI if available
+    if GROQ_AVAILABLE:
+
+        # Prompt sent to AI model
+        prompt = f"""
+You are a professional Sri Lankan investment advisor.
+
+User asked:
+{user_question}
+
+Symbol: {symbol}
+Current Price: {current_price}
+Forecast Price: {forecast}
+Future Price: {future_price}
+Recommendation: {recommendation}
+Risk: {risk}
+
+Provide concise investment explanation.
+"""
+
+        try:
+            # Request explanation from Groq LLM
+            response = client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "system", "content": "You are a disciplined financial advisor."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.3,
+                max_tokens=400
+            )
+
+            # Extract AI response text
+            explanation = response.choices[0].message.content.strip()
+
+        except:
+            # Fallback explanation if Groq fails
+            explanation = _fallback_explanation(symbol, forecast)
+
+    else:
+        # Fallback explanation if Groq unavailable
+        explanation = _fallback_explanation(symbol, forecast)
+
+    # ================= FINAL FORMATTED OUTPUT =================
+    output = f"""
+ AI INVESTMENT ANALYSIS
 
 
-def _fallback_answer(symbol, investment_amount, shares, current_price):
+== Recommendation :- {recommendation}
+== Market Trend   :- {trend}
+== Confidence     :- {confidence_label} ({confidence * 100:.0f}%)
+== Risk Level     :- {risk}
+== Future Price   :- {future_price}
+== Forecast Price :- {forecast:,.2f}
+== Market Sentiment :- {sentiment_percent}%
 
-    if investment_amount and shares:
-        return f"""
-Investing Rs. {investment_amount:,.0f} in {symbol} at the current price of Rs. {current_price}
-allows you to purchase approximately {shares} shares.
 
-This can be a reasonable starting investment, especially for learning purposes.
-However, consider diversification, transaction costs, and long-term strategy.
+ Key Influencing Factors
 
-This is educational analysis only.
-""".strip()
+"""
 
+    # Add SHAP feature importance values
+    for key, value in shap_values.items():
+        output += f"• {key}: {round(value, 4)}\n"
+
+    # Append explanation and disclaimer section
+    output += f"""
+
+
+ AI Explanation 
+
+{explanation}
+
+
+ Investment Disclaimer 
+
+-- This is AI-generated analysis with financial advice.
+-- Markets are volatile. Always do your own research.
+(IMPORTANT: This is financial advice. Always consult a financial advisor before making investment decisions.)
+== AI predictions are based on historical data and current trends, but they cannot guarantee future performance. Use this information as one of many tools in your investment decision-making process.==
+
+"""
+
+    # Return final formatted string
+    return output.strip()
+
+
+def _fallback_explanation(symbol, forecast):
+    """
+    Fallback explanation when AI model is unavailable.
+
+    Parameters:
+    ----------
+    symbol : str
+        Asset symbol
+
+    forecast : float
+        Forecasted price
+
+    Returns:
+    -------
+    str
+        Basic explanation text
+    """
     return f"""
-{symbol} appears suitable for long-term investment depending on risk profile.
-Please consider diversification and market conditions.
-
-This is educational analysis only.
+{symbol} shows current market movement toward Rs. {forecast:,.2f}.
+The recommendation is based on price trend, sentiment, and volatility analysis.
+Diversification is recommended before making investment decisions.
 """.strip()
